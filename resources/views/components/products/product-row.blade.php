@@ -14,7 +14,7 @@
             class="bg-green-500 text-white py-[5px] px-[10px] rounded hover:bg-green-700 shadow" title="Editar">
             <i class="fas fa-edit h-3 w-3 -ml-[2px]"></i>
         </button>
-        <form action="#" method="POST" class="inline-block">
+        <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="inline-block">
             @csrf
             @method('DELETE')
             <button type="submit" class="bg-red-500 text-white py-[5px] px-[10px] rounded hover:bg-red-700 shadow"

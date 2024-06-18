@@ -32,4 +32,15 @@ class ProductsController extends Controller
 
         return redirect()->route('products.index')->with('success', 'Produto atualizado com sucesso.');
     }
+
+    public function destroy(string $productId)
+    {
+        if (!$product = Product::find($productId)) {
+            return redirect()->route('products.index')->with('error', 'Produto não encontrado.');
+        }
+
+        $product->delete();
+
+        return redirect()->route('products.index')->with('success', 'Produto excluído com sucesso.');
+    }
 }
