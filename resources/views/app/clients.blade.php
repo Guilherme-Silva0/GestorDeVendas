@@ -6,7 +6,11 @@
     <div class="flex flex-col items-center  min-h-[calc(100vh-113px)] bg-gray-100">
         <div class="container mx-auto px-4">
             <div class="flex justify-end my-4">
-                <a href="#" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Adicionar Cliente</a>
+                <button onclick="openModal('addClientModal')"
+                    class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    <i class="fa-solid fa-plus"></i>
+                    Adicionar
+                    Cliente</button>
             </div>
             <div class="bg-white shadow-md rounded">
                 <table class="min-w-full bg-white rounded-2xl">
@@ -28,4 +32,6 @@
             {{-- {{ $clients->links() }} --}}
         </div>
     </div>
+
+    <x-add-client-modal />
 @endsection

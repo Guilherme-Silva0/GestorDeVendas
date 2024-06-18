@@ -1,5 +1,5 @@
 import './bootstrap';
-import './dashboard';
+import './app/index';
 
 import Alpine from 'alpinejs';
 
