@@ -12,7 +12,7 @@
                             Editar Produto
                         </h3>
                         <div class="mt-2">
-                            <form id="editProductForm" method="POST" action="#">
+                            <form id="editProductForm" method="POST">
                                 @csrf
                                 @method('PUT')
                                 <div class="mb-4 w-full">

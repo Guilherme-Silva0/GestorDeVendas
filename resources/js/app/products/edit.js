@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
-    function openEditProductModal(product) {
+    function openEditProductModal(product, action) {
         document.getElementById("editProductModal").classList.remove("hidden");
         document.getElementById("edit_name").value = product.name;
         document.getElementById("edit_price").value = maskPrice(product.price);
+        document.getElementById("editProductForm").action = action;
     }
 
     function validateProductName(name) {
