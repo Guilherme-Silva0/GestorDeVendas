@@ -6,7 +6,8 @@
     <td class="py-2 px-4 border-b text-center border-gray-200">
         R$ {{ number_format($product->price, 2, ',', '.') }}</td>
     <td class="py-2 px-4 border-b text-center border-gray-200 space-x-2">
-        <a href="#" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700 shadow" title="Ver">
+        <a href="{{ route('products.show', $product->id) }}"
+            class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700 shadow" title="Ver">
             <i class="fa-regular fa-eye h-4 w-4 -mr-px"></i>
         </a>
         <button

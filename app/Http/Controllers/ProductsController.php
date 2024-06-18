@@ -15,6 +15,15 @@ class ProductsController extends Controller
         return view('app.products', compact('products'));
     }
 
+    public function show(string $productId)
+    {
+        if (!$product = Product::find($productId)) {
+            return redirect()->route('products.index')->with('error', 'Produto não encontrado.');
+        }
+
+        return view('app.one-product', compact('product'));
+    }
+
     public function store(StoreProductRequest $request)
     {
         $product = Product::create($request->all());
