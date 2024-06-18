@@ -10,12 +10,12 @@ class ClientsController extends Controller
             collect([
                     'id' => 1,
                     'name' => 'Guilherme',
-                    'cpf' => '12345678901',
+                    'cpf' => '107.548.763-30',
             ]),
             collect([
                 'id' => 2,
                 'name' => 'Joaquim',
-                'cpf' => '12345678902',
+                'cpf' => '107.548.763-20',
             ]),
         ];
 

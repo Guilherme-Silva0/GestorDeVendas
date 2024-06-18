@@ -24,7 +24,7 @@
                     </thead>
                     <tbody>
                         @foreach ($clients as $client)
-                            <x-client-row :client="$client" />
+                            <x-clients.client-row :client="$client" />
                         @endforeach
                     </tbody>
                 </table>
@@ -33,5 +33,6 @@
         </div>
     </div>
 
-    <x-add-client-modal />
+    <x-clients.add-client-modal />
+    <x-clients.edit-client-modal />
 @endsection

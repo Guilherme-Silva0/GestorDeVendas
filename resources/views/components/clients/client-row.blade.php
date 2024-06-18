@@ -8,9 +8,11 @@
         <a href="#" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700 shadow" title="Ver">
             <i class="fa-regular fa-eye h-4 w-4 -mr-px"></i>
         </a>
-        <a href="#" class="bg-green-500 text-white p-2 rounded hover:bg-green-700 shadow" title="Editar">
-            <i class="fas fa-edit h-4 w-4 -mr-[4px]"></i>
-        </a>
+        <button
+            onclick="openEditModal({id: {{ $client->get('id') }}, name: '{{ $client->get('name') }}', cpf: '{{ $client->get('cpf') }}'});"
+            class="bg-green-500 text-white py-[5px] px-[10px] rounded hover:bg-green-700 shadow" title="Editar">
+            <i class="fas fa-edit h-3 w-3 -ml-[2px]"></i>
+        </button>
         <form action="#" method="POST" class="inline-block">
             @csrf
             @method('DELETE')
