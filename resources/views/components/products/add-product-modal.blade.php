@@ -12,7 +12,7 @@
                             Adicionar Produto
                         </h3>
                         <div class="mt-2">
-                            <form id="productForm" method="POST" action="#">
+                            <form id="productForm" method="POST" action="{{ route('products.store') }}">
                                 @csrf
                                 <div class="mb-4 w-full">
                                     <label for="name"

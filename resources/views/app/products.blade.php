@@ -12,6 +12,7 @@
                     Adicionar
                     Produto</button>
             </div>
+            <x-messages />
             <div class="bg-white shadow-md rounded">
                 <table class="min-w-full bg-white rounded-2xl">
                     <thead>

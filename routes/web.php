@@ -12,7 +12,9 @@ Route::get('/', [IndexController::class, 'index']);
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
     Route::get('/clients', [ClientsController::class, 'index'])->name('clients.index');
+
     Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
+    Route::post('/products', [ProductsController::class, 'store'])->name('products.store');
 });
 
 Route::middleware('auth')->group(function () {
