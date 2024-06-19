@@ -11,6 +11,7 @@
                     <i class="fa-solid fa-plus mr-1"></i>Criar nova venda
                 </button>
             </div>
+            <x-messages />
             <div class="bg-white shadow-md rounded">
                 <table class="min-w-full bg-white rounded-2xl">
                     <thead>

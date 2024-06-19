@@ -15,7 +15,7 @@
             $productsSale = collect($sale->products);
             $productNames = $productsSale
                 ->map(function ($product) {
-                    return $product->get('name') . ' (' . $product->get('quantity') . ')';
+                    return $product->name . ' (' . $product->pivot->quantity . ')';
                 })
                 ->implode(', ');
 

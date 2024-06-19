@@ -9,6 +9,8 @@ class Sale extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['client_id', 'user_id', 'total'];
+
     public function client()
     {
         return $this->belongsTo(Client::class);
@@ -21,7 +23,7 @@ class Sale extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'sale_product')
+        return $this->belongsToMany(Product::class, 'sale_products')
                     ->withPivot('price', 'quantity');
     }
 

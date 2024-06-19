@@ -16,6 +16,7 @@ return new class() extends Migration {
             $table->decimal('price', 8, 2);
             $table->integer('quantity');
             $table->primary(['sale_id', 'product_id']);
+            $table->timestamps();
         });
     }
 

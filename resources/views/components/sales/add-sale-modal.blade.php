@@ -12,7 +12,7 @@
                     <div class="mt-3 text-center w-full sm:mt-0 sm:text-left">
                         <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Adicionar Venda</h3>
                         <div class="mt-2">
-                            <form id="addSaleForm" method="GET" action="#">
+                            <form id="addSaleForm" method="POST" action="{{ route('sales.store') }}">
                                 @csrf
 
                                 <div class="mt-2">
