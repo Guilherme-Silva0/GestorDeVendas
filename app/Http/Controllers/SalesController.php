@@ -23,6 +23,15 @@ class SalesController extends Controller
         return view('app.dashboard', compact('sales', 'clients', 'products'));
     }
 
+    public function show($saleId)
+    {
+        $sale = Sale::with(['client', 'user', 'installments', 'products'])->find($saleId);
+        $clients = Client::all();
+        $products = Product::all();
+
+        return view('app.one-sale', compact('sale', 'clients', 'products'));
+    }
+
     public function store(StoreSaleRequest $request)
     {
         $products = json_decode($request->input('products'), true);
