@@ -31,9 +31,9 @@
             class="bg-blue-500 text-white py-[5px] px-[8px] rounded hover:bg-blue-700 shadow" title="Ver">
             <i class="fa-regular fa-eye h-4 w-4 -ml-px"></i>
         </a>
-        <a href="#" class="bg-yellow-500 text-white py-[5px] px-[8px] rounded hover:bg-yellow-700 shadow"
-            title="Imprimir">
-            <i class="fa-solid fa-print h-4 w-4 -ml-px"></i>
+        <a href="{{ route('sales.pdf', $sale->id) }}"
+            class="bg-yellow-500 text-white py-[5px] px-[8px] rounded hover:bg-yellow-700 shadow" title="Imprimir">
+            <i class="fa-solid fa-file-pdf h-4 w-4 -ml-px"></i>
         </a>
         <button onclick="openEditSaleModal({sale: {{ json_encode($sale) }}}, '{{ route('sales.update', $sale->id) }}');"
             class="bg-green-500 text-white py-[5px] px-[10px] rounded hover:bg-green-700 shadow" title="Editar">

@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleProduct;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -87,6 +88,15 @@ class SalesController extends Controller
         $sale->delete();
 
         return redirect()->route('sales.index')->with('success', 'Venda excluída com sucesso.');
+    }
+
+    public function generatePdf($id)
+    {
+        $sale = Sale::with(['client', 'user', 'products', 'installments'])->findOrFail($id);
+
+        $pdf = Pdf::loadView('app.pdf-sale', compact('sale'));
+
+        return $pdf->download('sale_'.$sale->id.'.pdf');
     }
 
     public function updateSale(Sale $sale, $clientId, $products, $total, $installments)

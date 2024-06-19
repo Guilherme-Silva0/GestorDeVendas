@@ -15,6 +15,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/sales', [SalesController::class, 'store'])->name('sales.store');
     Route::put('/sales/{saleId}', [SalesController::class, 'update'])->name('sales.update');
     Route::delete('/sales/{saleId}', [SalesController::class, 'destroy'])->name('sales.destroy');
+    Route::get('/sales/{id}/pdf', [SalesController::class, 'generatePdf'])->name('sales.pdf');
 
     Route::get('/clients', [ClientsController::class, 'index'])->name('clients.index');
     Route::get('clients/{clientId}', [ClientsController::class, 'show'])->name('clients.show');

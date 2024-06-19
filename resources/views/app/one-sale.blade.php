@@ -50,6 +50,11 @@
                     <a href="{{ route('sales.index') }}" id="backButton"
                         class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700" title="Voltar"><i
                             class="fa-solid fa-arrow-left"></i> Voltar</a>
+
+                    <a href="{{ route('sales.pdf', $sale->id) }}" id="pdfButton"
+                        class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700" title="PDF"><i
+                            class="fa-solid fa-file-pdf"></i> Baixar PDF</a>
+
                     <form action="{{ route('sales.destroy', $sale->id) }}" method="post">
                         @csrf
                         @method('DELETE')
