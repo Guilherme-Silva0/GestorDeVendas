@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
     productSelect.addEventListener("change", function () {
         const selectedProduct = JSON.parse(productSelect.value);
         if (selectedProduct) {
+            selectedProduct.quantity = 1; // Adicionando a quantidade padrão como 1
             products.push(selectedProduct);
             updateProductList();
             updateTotal();
@@ -32,17 +33,21 @@ document.addEventListener("DOMContentLoaded", function () {
         productList.innerHTML = "";
         products.forEach((product, index) => {
             const li = document.createElement("li");
-            li.className = "flex items-center";
+            li.className = "flex items-center gap-1 flex-wrap";
             li.innerHTML = `
-                ${product.name} - R$
+                <div>${product.name} - R$
                 <input type="number" value="${product.price.toFixed(
                     2
-                )}" class="price-input ml-2 mr-2 w-24 text-right border rounded px-1" data-index="${index}">
+                )}" class="price-input ml-2 mr-2 w-24 text-right border rounded px-1" data-index="${index}"></div>
+                <div>Qtd: <input type="number" value="${
+                    product.quantity
+                }" class="quantity-input ml-2 mr-2 w-16 text-right border rounded px-1" data-index="${index}" min="1"></div>
                 <button type="button" class="remove-btn ml-2 text-red-500">Remover</button>
             `;
             productList.appendChild(li);
 
             const priceInput = li.querySelector(".price-input");
+            const quantityInput = li.querySelector(".quantity-input");
             const removeBtn = li.querySelector(".remove-btn");
 
             priceInput.addEventListener("change", function () {
@@ -55,6 +60,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
 
+            quantityInput.addEventListener("change", function () {
+                const newQuantity = parseInt(quantityInput.value);
+                if (!isNaN(newQuantity) && newQuantity > 0) {
+                    products[index].quantity = newQuantity;
+                    updateTotal();
+                } else {
+                    quantityInput.value = products[index].quantity;
+                }
+            });
+
             removeBtn.addEventListener("click", function () {
                 products.splice(index, 1);
                 updateProductList();
@@ -64,7 +79,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateTotal() {
-        total = products.reduce((sum, product) => sum + product.price, 0);
+        total = products.reduce(
+            (sum, product) => sum + product.price * product.quantity,
+            0
+        );
         totalInput.value = `R$ ${total.toFixed(2).replace(".", ",")}`;
         recalculateInstallments();
         updateInstallmentList();
