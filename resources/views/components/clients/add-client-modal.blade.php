@@ -12,7 +12,7 @@
                             Adicionar Cliente
                         </h3>
                         <div class="mt-2">
-                            <form id="clientForm" method="POST" action="#">
+                            <form id="clientForm" method="POST" action="{{ route('clients.store') }}">
                                 @csrf
                                 <div class="mb-4 w-full">
                                     <label for="name"
