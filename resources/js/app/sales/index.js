@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
     productSelect.addEventListener("change", function () {
         const selectedProduct = JSON.parse(productSelect.value);
         if (selectedProduct) {
-            selectedProduct.quantity = 1; // Adicionando a quantidade padrão como 1
+            selectedProduct.quantity = 1;
             products.push(selectedProduct);
             updateProductList();
             updateTotal();
@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     new Date().setDate(new Date().getDate() + 30)
                 ),
                 number: 1,
+                isFixed: false,
             });
         } else {
             const newAmount = total / installments.length;
@@ -120,6 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 )
             ),
             number: installments.length + 1,
+            isFixed: false,
         };
         installments.push(newInstallment);
 
@@ -129,11 +131,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function recalculateInstallments() {
         if (installments.length > 0) {
-            const amountPerInstallment = total / installments.length;
-            installments.forEach(
-                (installment, index) =>
-                    (installment.value = amountPerInstallment)
-            );
+            const fixedAmounts = installments
+                .filter((installment) => installment.isFixed)
+                .reduce((sum, installment) => sum + installment.value, 0);
+            const remainingAmount = total - fixedAmounts;
+            const remainingInstallments = installments.filter(
+                (installment) => !installment.isFixed
+            ).length;
+            const amountPerRemainingInstallment =
+                remainingAmount / remainingInstallments;
+
+            installments.forEach((installment) => {
+                if (!installment.isFixed) {
+                    installment.value = amountPerRemainingInstallment;
+                }
+            });
         }
     }
 
@@ -222,19 +234,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function adjustInstallments(changedIndex, newAmount) {
-        const remainingAmount = total - newAmount;
-        const remainingInstallments = installments.length - 1;
-        const amountPerRemainingInstallment =
-            remainingAmount / remainingInstallments;
+        if (newAmount > total) {
+            alert("O valor da parcela não pode ultrapassar o valor total.");
+            updateInstallmentList();
+            return;
+        }
 
         installments[changedIndex].value = newAmount;
+        installments[changedIndex].isFixed = true;
 
-        installments.forEach((installment, index) => {
-            if (index !== changedIndex) {
-                installment.value = amountPerRemainingInstallment;
-            }
-        });
-
+        recalculateInstallments();
         updateInstallmentList();
     }
 

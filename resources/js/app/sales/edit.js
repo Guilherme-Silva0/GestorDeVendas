@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
     productSelect.addEventListener("change", function () {
         const selectedProduct = JSON.parse(productSelect.value);
         if (selectedProduct) {
+            selectedProduct.quantity = 1;
             products.push(selectedProduct);
             updateProductList();
             updateTotal();
@@ -38,10 +39,13 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
         total = sale.total;
-        installments = sale.installments;
+        installments = sale.installments.map((installment) => ({
+            ...installment,
+            isFixed: false,
+        }));
         clientSelect.value = sale.client.id;
         updateProductList();
-        updateTotal();
+        updateTotal(true);
         updateInstallmentList();
         document.getElementById("editSaleForm").action = route;
 
@@ -110,14 +114,17 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    function updateTotal() {
+    function updateTotal(isFistTime = false) {
         total = products.reduce(
             (sum, product) => sum + product.price * product.quantity,
             0
         );
         totalInput.value = `R$ ${total.toFixed(2).replace(".", ",")}`;
-        recalculateInstallments();
-        updateInstallmentList();
+
+        if (!isFistTime) {
+            recalculateInstallments();
+            updateInstallmentList();
+        }
     }
 
     function createInitialInstallment() {
@@ -131,6 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     new Date().setDate(new Date().getDate() + 30)
                 ),
                 number: 1,
+                isFixed: false,
             });
         } else {
             const newAmount = total / installments.length;
@@ -152,6 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 )
             ),
             number: installments.length + 1,
+            isFixed: false,
         };
         installments.push(newInstallment);
 
@@ -160,12 +169,21 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function recalculateInstallments() {
-        if (installments.length > 0) {
-            const amountPerInstallment = total / installments.length;
-            installments.forEach(
-                (installment, index) =>
-                    (installment.value = amountPerInstallment)
-            );
+        const fixedTotal = installments.reduce((sum, installment) => {
+            return installment.isFixed ? sum + installment.value : sum;
+        }, 0);
+        const remainingTotal = total - fixedTotal;
+        const flexibleInstallments = installments.filter(
+            (i) => !i.isFixed
+        ).length;
+        if (flexibleInstallments > 0) {
+            const amountPerFlexibleInstallment =
+                remainingTotal / flexibleInstallments;
+            installments.forEach((installment) => {
+                if (!installment.isFixed) {
+                    installment.value = amountPerFlexibleInstallment;
+                }
+            });
         }
     }
 
@@ -181,7 +199,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 date = installment.due_date.toISOString().substring(0, 10);
             }
             div.innerHTML = `
-                <input type="number" value="${installment.value.toFixed(
+                <input type="number" value="${Number(installment.value).toFixed(
                     2
                 )}" class="installment-amount-input ml-2 mr-2 w-24 text-right border rounded px-1" data-index="${index}">
                 <input type="date" value="${date}" class="installment-date-input ml-2 mr-2 border rounded px-1" data-index="${index}">
@@ -198,7 +216,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (!isNaN(newAmount) && newAmount >= 0) {
                     adjustInstallments(index, newAmount);
                 } else {
-                    amountInput.value = installments[index].value.toFixed(2);
+                    amountInput.value = Number(
+                        installments[index].value
+                    ).toFixed(2);
                 }
             });
 
@@ -255,19 +275,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function adjustInstallments(changedIndex, newAmount) {
-        const remainingAmount = total - newAmount;
-        const remainingInstallments = installments.length - 1;
-        const amountPerRemainingInstallment =
-            remainingAmount / remainingInstallments;
-
+        if (newAmount > total) {
+            alert("O valor da parcela não pode ultrapassar o valor total.");
+            updateInstallmentList();
+            return;
+        }
         installments[changedIndex].value = newAmount;
+        installments[changedIndex].isFixed = true;
 
-        installments.forEach((installment, index) => {
-            if (index !== changedIndex) {
-                installment.value = amountPerRemainingInstallment;
-            }
-        });
-
+        recalculateInstallments();
         updateInstallmentList();
     }
 

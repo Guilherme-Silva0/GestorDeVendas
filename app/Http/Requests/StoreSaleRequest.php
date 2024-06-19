@@ -50,6 +50,11 @@ class StoreSaleRequest extends FormRequest
 
                     foreach ($installments as $installment) {
                         $sum += $installment['value'];
+
+                        if ($installment['value'] > $total) {
+                            $validator->errors()->add('installments', 'Parcela maior que o valor total.');
+                        }
+
                         $currentDate = \Carbon\Carbon::parse($installment['due_date']);
 
                         if ($previousDate && $currentDate <= $previousDate) {
