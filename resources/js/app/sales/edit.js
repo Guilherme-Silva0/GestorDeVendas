@@ -28,16 +28,37 @@ document.addEventListener("DOMContentLoaded", function () {
         addInstallment();
     });
 
-    function openEditSaleModal({ sale }) {
-        products = sale.products;
+    function openEditSaleModal({ sale }, route) {
+        sale.products.forEach((product) => {
+            products.push({
+                id: product.id,
+                name: product.name,
+                price: Number(product.pivot.price),
+                quantity: product.pivot.quantity,
+            });
+        });
         total = sale.total;
         installments = sale.installments;
         clientSelect.value = sale.client.id;
         updateProductList();
         updateTotal();
         updateInstallmentList();
+        document.getElementById("editSaleForm").action = route;
 
         document.getElementById("editSaleModal").classList.remove("hidden");
+    }
+
+    function closeEditSaleModal() {
+        products = [];
+        total = 0;
+        installments = [];
+        clientSelect.value = "";
+        productSelect.value = "";
+        updateProductList();
+        updateTotal();
+        updateInstallmentList();
+
+        document.getElementById("editSaleModal").classList.add("hidden");
     }
 
     function updateProductList() {
@@ -46,15 +67,19 @@ document.addEventListener("DOMContentLoaded", function () {
             const li = document.createElement("li");
             li.className = "flex items-center";
             li.innerHTML = `
-                ${product.name} - R$
+                <div>${product.name} - R$
                 <input type="number" value="${product.price.toFixed(
                     2
-                )}" class="price-input ml-2 mr-2 w-24 text-right border rounded px-1" data-index="${index}">
+                )}" class="price-input ml-2 mr-2 w-24 text-right border rounded px-1" data-index="${index}"></div>
+                <div>Qtd: <input type="number" value="${
+                    product.quantity
+                }" class="quantity-input ml-2 mr-2 w-16 text-right border rounded px-1" data-index="${index}" min="1"></div>
                 <button type="button" class="remove-btn ml-2 text-red-500">Remover</button>
             `;
             productList.appendChild(li);
 
             const priceInput = li.querySelector(".price-input");
+            const quantityInput = li.querySelector(".quantity-input");
             const removeBtn = li.querySelector(".remove-btn");
 
             priceInput.addEventListener("change", function () {
@@ -67,6 +92,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
 
+            quantityInput.addEventListener("change", function () {
+                const newQuantity = parseInt(quantityInput.value);
+                if (!isNaN(newQuantity) && newQuantity > 0) {
+                    products[index].quantity = newQuantity;
+                    updateTotal();
+                } else {
+                    quantityInput.value = products[index].quantity;
+                }
+            });
+
             removeBtn.addEventListener("click", function () {
                 products.splice(index, 1);
                 updateProductList();
@@ -76,7 +111,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateTotal() {
-        total = products.reduce((sum, product) => sum + product.price, 0);
+        total = products.reduce(
+            (sum, product) => sum + product.price * product.quantity,
+            0
+        );
         totalInput.value = `R$ ${total.toFixed(2).replace(".", ",")}`;
         recalculateInstallments();
         updateInstallmentList();
@@ -282,4 +320,5 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     window.openEditSaleModal = openEditSaleModal;
+    window.closeEditSaleModal = closeEditSaleModal;
 });

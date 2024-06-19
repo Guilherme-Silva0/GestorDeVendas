@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSaleRequest;
+use App\Http\Requests\UpdateSaleRequest;
 use App\Models\Client;
 use App\Models\Installments;
 use App\Models\Product;
@@ -28,6 +29,53 @@ class SalesController extends Controller
         $installments = json_decode($request->input('installments'), true);
 
         return $this->createSale($request->input('client_id'), $products, $request->input('total'), $installments);
+    }
+
+    public function update(UpdateSaleRequest $request, $id)
+    {
+        $sale = Sale::find($id);
+
+        if (!$sale) {
+            return redirect()->route('sales.index')->with('error', 'Venda não encontrada.');
+        }
+
+        $products = json_decode($request->input('products'), true);
+        $installments = json_decode($request->input('installments'), true);
+
+        return $this->updateSale($sale, $request->input('client_id'), $products, $request->input('total'), $installments);
+    }
+
+    public function updateSale(Sale $sale, $clientId, $products, $total, $installments)
+    {
+        $user = Auth::user();
+        $total = str_replace(['R$', ','], ['', '.'], $total);
+
+        $sale->client_id = $clientId;
+        $sale->user_id = $user->id;
+        $sale->total = $total;
+        $sale->save();
+
+        SaleProduct::where('sale_id', $sale->id)->delete();
+        foreach ($products as $product) {
+            SaleProduct::create([
+                'sale_id' => $sale->id,
+                'product_id' => $product['id'],
+                'price' => $product['price'],
+                'quantity' => $product['quantity'],
+            ]);
+        }
+
+        Installments::where('sale_id', $sale->id)->delete();
+        foreach ($installments as $installment) {
+            Installments::create([
+                'sale_id' => $sale->id,
+                'number' => $installment['number'],
+                'value' => $installment['value'],
+                'due_date' => \Carbon\Carbon::parse($installment['due_date'])->format('Y-m-d H:i:s'),
+            ]);
+        }
+
+        return redirect()->route('sales.index')->with('success', 'Venda atualizada com sucesso.');
     }
 
     public function createSale($clientId, $products, $total, $installments)
