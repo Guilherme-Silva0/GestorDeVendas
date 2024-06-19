@@ -11,6 +11,10 @@ Route::get('/', [IndexController::class, 'index']);
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/sales', [SalesController::class, 'index'])->name('sales.index');
+    Route::get('sales/{saleId}', [SalesController::class, 'show'])->name('sales.show');
+    Route::post('/sales', [SalesController::class, 'store'])->name('sales.store');
+    Route::put('/sales/{saleId}', [SalesController::class, 'update'])->name('sales.update');
+    Route::delete('/sales/{saleId}', [SalesController::class, 'destroy'])->name('sales.destroy');
 
     Route::get('/clients', [ClientsController::class, 'index'])->name('clients.index');
     Route::get('clients/{clientId}', [ClientsController::class, 'show'])->name('clients.show');

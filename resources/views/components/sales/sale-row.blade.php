@@ -1,18 +1,18 @@
 @props(['sale'])
 
 <tr>
-    <td class="py-2 px-4 border-b border-gray-200 text-center">{{ $sale->get('id') }}</td>
+    <td class="py-2 px-4 border-b border-gray-200 text-center">{{ $sale->id }}</td>
     <td class="py-2 px-4 border-b border-gray-200 text-center">
-        {{ $sale->get('client')->get('name') }}</td>
+        {{ $sale->client->name }}</td>
     <td class="py-2 px-4 border-b border-gray-200 text-center">
-        {{ $sale->get('seller')->get('name') }}</td>
+        {{ $sale->user->name }}</td>
     <td class="py-2 px-4 border-b border-gray-200 text-center">
-        R$ {{ number_format($sale->get('total'), 2, ',', '.') }}</td>
+        R$ {{ number_format($sale->total, 2, ',', '.') }}</td>
     <td class="py-2 px-4 border-b border-gray-200 text-center">
-        {{ count($sale->get('installments')) }}x</td>
+        {{ count($sale->installments) }}x</td>
     <td class="py-2 px-4 border-b border-gray-200 text-center">
         @php
-            $productsSale = collect($sale->get('products'));
+            $productsSale = collect($sale->products);
             $productNames = $productsSale
                 ->map(function ($product) {
                     return $product->get('name') . ' (' . $product->get('quantity') . ')';
@@ -27,18 +27,19 @@
         {{ $productNames }}
     </td>
     <td class="py-2 px-4 border-b border-gray-200 text-center flex gap-1 justify-center items-center flex-wrap">
-        <a href="#" class="bg-blue-500 text-white py-[5px] px-[8px] rounded hover:bg-blue-700 shadow" title="Ver">
+        <a href="{{ route('sales.show', $sale->id) }}"
+            class="bg-blue-500 text-white py-[5px] px-[8px] rounded hover:bg-blue-700 shadow" title="Ver">
             <i class="fa-regular fa-eye h-4 w-4 -ml-px"></i>
         </a>
         <a href="#" class="bg-yellow-500 text-white py-[5px] px-[8px] rounded hover:bg-yellow-700 shadow"
             title="Imprimir">
             <i class="fa-solid fa-print h-4 w-4 -ml-px"></i>
         </a>
-        <button onclick="openEditSaleModal({sale: {{ json_encode($sale) }}});"
+        <button onclick="openEditSaleModal({sale: {{ json_encode($sale) }}}, '{{ route('sales.update', $sale->id) }}');"
             class="bg-green-500 text-white py-[5px] px-[10px] rounded hover:bg-green-700 shadow" title="Editar">
             <i class="fas fa-edit h-3 w-3 -ml-[2px]"></i>
         </button>
-        <form action="#" method="POST" class="inline-block">
+        <form action="{{ route('sales.destroy', $sale->id) }}" method="POST" class="inline-block">
             @csrf
             @method('DELETE')
             <button type="submit" class="bg-red-500 text-white py-[5px] px-[10px] rounded hover:bg-red-700 shadow"

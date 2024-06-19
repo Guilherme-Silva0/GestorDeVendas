@@ -20,7 +20,7 @@
                                     <select id="edit_client" name="edit_client_id"
                                         class="form-select mt-1 block w-full">
                                         @foreach ($clients as $client)
-                                            <option value="{{ $client->get('id') }}">{{ $client->get('name') }}</option>
+                                            <option value="{{ $client->id }}">{{ $client->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -32,9 +32,9 @@
                                         <option value="">Selecione um produto</option>
                                         @foreach ($products as $product)
                                             <option
-                                                value="{{ json_encode(['id' => $product->get('id'), 'name' => $product->get('name'), 'price' => $product->get('price')]) }}">
-                                                {{ $product->get('name') }} (R$
-                                                {{ number_format($product->get('price'), 2, ',', '.') }})
+                                                value="{{ json_encode(['id' => $product->id, 'name' => $product->name, 'price' => $product->price]) }}">
+                                                {{ $product->name }} (R$
+                                                {{ number_format($product->price, 2, ',', '.') }})
                                             </option>
                                         @endforeach
                                     </select>

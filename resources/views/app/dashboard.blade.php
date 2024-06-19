@@ -31,7 +31,7 @@
                     </tbody>
                 </table>
             </div>
-            {{-- {{ $products->links() }} --}}
+            {{ $sales->links() }}
         </div>
     </div>
 
