@@ -9,6 +9,7 @@ use App\Models\Installments;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleProduct;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,11 +17,32 @@ class SalesController extends Controller
 {
     public function index(Request $request)
     {
-        $sales = Sale::with(['client', 'user', 'installments', 'products'])->paginate(10);
+        $query = Sale::query();
+
+        // Aplicar filtros
+        if ($request->filled('client_filter')) {
+            $query->where('client_id', $request->input('client_filter'));
+        }
+
+        if ($request->filled('user_filter')) {
+            $query->where('user_id', $request->input('user_filter'));
+        }
+
+        if ($request->filled('total_min_filter')) {
+            $query->where('total', '>=', $request->input('total_min_filter'));
+        }
+
+        if ($request->filled('total_max_filter')) {
+            $query->where('total', '<=', $request->input('total_max_filter'));
+        }
+
+        $sales = $query->paginate(10);
+
         $clients = Client::all();
+        $users = User::all();
         $products = Product::all();
 
-        return view('app.dashboard', compact('sales', 'clients', 'products'));
+        return view('app.dashboard', compact('sales', 'clients', 'users', 'products'));
     }
 
     public function show($saleId)
