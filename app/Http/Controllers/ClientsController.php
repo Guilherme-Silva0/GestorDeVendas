@@ -40,4 +40,15 @@ class ClientsController extends Controller
 
         return redirect()->route('clients.index')->with('success', 'Cliente atualizado com sucesso.');
     }
+
+    public function destroy(string $clientId)
+    {
+        if (!$client = Client::find($clientId)) {
+            return redirect()->route('clients.index')->with('error', 'Cliente não encontrado.');
+        }
+
+        $client->delete();
+
+        return redirect()->route('clients.index')->with('success', 'Cliente excluído com sucesso.');
+    }
 }
