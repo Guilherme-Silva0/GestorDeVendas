@@ -2,22 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
+
 class ClientsController extends Controller
 {
     public function index()
     {
-        $clients = [
-            collect([
-                    'id' => 1,
-                    'name' => 'Guilherme',
-                    'cpf' => '107.548.763-30',
-            ]),
-            collect([
-                'id' => 2,
-                'name' => 'Joaquim',
-                'cpf' => '107.548.763-20',
-            ]),
-        ];
+        $clients = Client::paginate(10);
 
         return view('app.clients', compact('clients'));
     }
