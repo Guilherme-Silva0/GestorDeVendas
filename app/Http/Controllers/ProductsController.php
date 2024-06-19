@@ -27,6 +27,9 @@ class ProductsController extends Controller
     public function store(StoreProductRequest $request)
     {
         $product = Product::create($request->all());
+        if (!$product) {
+            return redirect()->route('products.index')->with('error', 'Erro ao criar o produto.');
+        }
 
         return redirect()->route('products.index')->with('success', 'Produto criado com sucesso.');
     }
