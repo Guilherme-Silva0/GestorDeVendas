@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreClientRequest;
+use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
 
 class ClientsController extends Controller
@@ -23,5 +24,20 @@ class ClientsController extends Controller
         }
 
         return redirect()->route('clients.index')->with('success', 'Cliente criado com sucesso.');
+    }
+
+    public function update(UpdateClientRequest $request, string $clientId)
+    {
+        if (!$client = Client::find($clientId)) {
+            return redirect()->route('clients.index')->with('error', 'Cliente não encontrado.');
+        }
+
+        $client = $client->update($request->all());
+
+        if (!$client) {
+            return redirect()->route('clients.index')->with('error', 'Erro ao atualizar o cliente.');
+        }
+
+        return redirect()->route('clients.index')->with('success', 'Cliente atualizado com sucesso.');
     }
 }

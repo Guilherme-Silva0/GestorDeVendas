@@ -18,7 +18,7 @@
                                 <div class="mb-4">
                                     <label for="edit_name"
                                         class="block text-gray-700 text-sm font-bold mb-2">Nome:</label>
-                                    <input type="text" id="edit_name" name="edit_name"
+                                    <input type="text" id="edit_name" name="name"
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                     <p id="editNameError" class="text-red-500 text-xs italic hidden">Por favor, insira
                                         um nome válido.</p>
@@ -26,7 +26,7 @@
                                 <div class="mb-4">
                                     <label for="edit_cpf"
                                         class="block text-gray-700 text-sm font-bold mb-2">CPF:</label>
-                                    <input type="text" id="edit_cpf" name="edit_cpf"
+                                    <input type="text" id="edit_cpf" name="cpf"
                                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                                     <p id="editCpfError" class="text-red-500 text-xs italic hidden">CPF inválido. Por
                                         favor, insira um CPF válido.</p>

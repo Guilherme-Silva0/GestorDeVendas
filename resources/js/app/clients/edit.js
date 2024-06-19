@@ -42,10 +42,11 @@ function maskCPF(cpf) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    function openEditModal(client) {
+    function openEditModal(client, route) {
         document.getElementById("editClientModal").classList.remove("hidden");
         document.getElementById("edit_name").value = client.name;
         document.getElementById("edit_cpf").value = client.cpf;
+        document.getElementById("editClientForm").action = route;
     }
 
     const cpfInput = document.getElementById("edit_cpf");

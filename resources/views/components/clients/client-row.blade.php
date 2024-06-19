@@ -9,7 +9,7 @@
             <i class="fa-regular fa-eye h-4 w-4 -mr-px"></i>
         </a>
         <button
-            onclick="openEditModal({id: {{ $client->id }}, name: '{{ $client->name }}', cpf: '{{ $client->cpf }}'});"
+            onclick="openEditModal({id: {{ $client->id }}, name: '{{ $client->name }}', cpf: '{{ $client->cpf }}'}, '{{ route('clients.update', $client->id) }}');"
             class="bg-green-500 text-white py-[5px] px-[10px] rounded hover:bg-green-700 shadow" title="Editar">
             <i class="fas fa-edit h-3 w-3 -ml-[2px]"></i>
         </button>
