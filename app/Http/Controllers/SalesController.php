@@ -45,6 +45,19 @@ class SalesController extends Controller
         return $this->updateSale($sale, $request->input('client_id'), $products, $request->input('total'), $installments);
     }
 
+    public function destroy($saleId)
+    {
+        $sale = Sale::find($saleId);
+
+        if (!$sale) {
+            return redirect()->route('sales.index')->with('error', 'Venda não encontrada.');
+        }
+
+        $sale->delete();
+
+        return redirect()->route('sales.index')->with('success', 'Venda excluída com sucesso.');
+    }
+
     public function updateSale(Sale $sale, $clientId, $products, $total, $installments)
     {
         $user = Auth::user();
