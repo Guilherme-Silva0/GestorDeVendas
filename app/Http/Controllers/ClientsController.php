@@ -15,6 +15,15 @@ class ClientsController extends Controller
         return view('app.clients', compact('clients'));
     }
 
+    public function show(string $clientId)
+    {
+        if (!$client = Client::find($clientId)) {
+            return redirect()->route('clients.index')->with('error', 'Cliente não encontrado.');
+        }
+
+        return view('app.one-client', compact('client'));
+    }
+
     public function store(StoreClientRequest $request)
     {
         $client = Client::create($request->all());
